@@ -1,4 +1,4 @@
-# Project e_metting
+# Project e_meeting
 
 One Paragraph of project description goes here
 
