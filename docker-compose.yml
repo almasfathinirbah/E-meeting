@@ -1,0 +1,81 @@
+version: "3.8"
+
+services:
+  app:
+    container_name: e-meeting-app-cloud
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: prod
+    restart: unless-stopped
+    ports:
+      - "${APP_PORT_CLOUD}:${APP_PORT}"
+    env_file:
+      - .env
+    environment:
+      APP_ENV: ${APP_ENV}
+      PORT: ${APP_PORT_CLOUD}
+
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_USER: ${DATABASE_USER}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_MAX_OPEN_CONNECTIONS: ${DATABASE_MAX_OPEN_CONNECTIONS}
+      DATABASE_MAX_IDLE_CONNECTIONS: ${DATABASE_MAX_IDLE_CONNECTIONS}
+
+      JWT_SECRET_KEY: ${JWT_SECRET_KEY}
+      JWT_ISSUER: ${JWT_ISSUER}
+      JWT_TOKEN_DURATION: ${JWT_TOKEN_DURATION}
+
+      CLOUDFLARE_R2_BUCKET_NAME: ${CLOUDFLARE_R2_BUCKET_NAME}
+      CLOUDFLARE_R2_API_KEY: ${CLOUDFLARE_R2_API_KEY}
+      CLOUDFLARE_R2_API_SECRET: ${CLOUDFLARE_R2_API_SECRET}
+      CLOUDFLARE_R2_TOKEN: ${CLOUDFLARE_R2_TOKEN}
+      CLOUDFLARE_R2_ACCOUNT_ID: ${CLOUDFLARE_R2_ACCOUNT_ID}
+      CLOUDFLARE_R2_PUBLIC_URL: ${CLOUDFLARE_R2_PUBLIC_URL}
+
+
+      
+      SMTP_HOST:  ${SMTP_HOST}
+      SMTP_PORT:  ${SMTP_PORT}
+      SMTP_USERNAME:  ${SMTP_USERNAME}
+      SMTP_PASSWORD:  ${SMTP_PASSWORD}
+      SMTP_FROM_EMAIL:  ${SMTP_FROM_EMAIL}
+      SMTP_INSECURE_SKIP_VERIFY:  ${SMTP_INSECURE_SKIP_VERIFY}
+      SMTP_USE_TLS:  ${SMTP_USE_TLS}
+      TEMPLATE_PATH:  ${TEMPLATE_PATH}
+      TEMPLATE_LOGO_URL:  ${TEMPLATE_LOGO_URL}
+      SMTP_TIMEOUT_DURATION:  ${SMTP_TIMEOUT_DURATION}
+
+    networks:
+      - emeeting
+      - postgres_postgres-network
+
+#   psql_bp:
+#     image: postgres:latest
+#     restart: unless-stopped
+#     ports:
+#       - "${DATABASE_PORT}:5432"
+#     environment:
+#       POSTGRES_DB: ${DATABASE_NAME}
+#       POSTGRES_USER: ${DATABASE_USER}
+#       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+#     volumes:
+#       - psql_volume_bp:/var/lib/postgresql/data
+#     healthcheck:
+#       test: ["CMD-SHELL", "sh -c 'pg_isready -U ${DATABASE_USER} -d ${DATABASE_NAME}'"]
+#       interval: 5s
+#       timeout: 5s
+#       retries: 3
+#       start_period: 15s
+#     networks:
+#       - emeeting
+
+# volumes:
+#   psql_volume_bp:
+
+networks:
+  emeeting:
+  postgres_postgres-network:
+    external: true
